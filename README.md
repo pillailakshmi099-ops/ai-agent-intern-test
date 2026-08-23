@@ -74,8 +74,9 @@ For knowledge-base questions, only relevant retrieved passages are provided.
 
 For order questions, the order lookup function retrieves the requested order and returns a sanitized result rather than exposing the complete orders dataset.
 
-Project Structure
+## Project Structure
 
+```text
 ai-agent-intern-test/
 │
 ├── app/
@@ -120,25 +121,28 @@ ai-agent-intern-test/
 ├── test_gemini.py
 └── README.md
 
-Technology Stack
-Language
+## Technology Stack
+
+### Language
 
 Python
 
-Language Model
+### Language Model
 
 Google Gemini
 
 The Gemini model is used for response generation, conversational behavior, and tool interaction.
 
-Retrieval
+### Retrieval
 
-The Markdown documents in knowledge-base/ are processed into chunks and embedded for semantic retrieval.
+The Markdown documents in `knowledge-base/` are processed into chunks and embedded for semantic retrieval.
 
 The generated retrieval data is stored locally in:
 
+```text
 storage/chunks.json
 storage/embeddings.npy
+
 Order Data
 
 Mock order information is stored in:
