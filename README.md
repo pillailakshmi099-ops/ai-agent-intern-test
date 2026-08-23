@@ -67,6 +67,7 @@ The implementation focuses on reliable customer support behavior when handling c
                     /          \
                    /            \
               Sources        Human Handoff
+```
 
 The complete knowledge base is not sent to the model.
 
@@ -120,6 +121,7 @@ ai-agent-intern-test/
 ├── .gitignore
 ├── test_gemini.py
 └── README.md
+```
 
 ## Technology Stack
 
@@ -142,16 +144,16 @@ The generated retrieval data is stored locally in:
 ```text
 storage/chunks.json
 storage/embeddings.npy
-
-Order Data
+```
+### Order Data
 
 Mock order information is stored in:
-
+```text
 data/orders.json
-
+```
 The complete order file is not provided to the model.
 
-Testing
+### Testing
 
 The project uses:
 
@@ -160,32 +162,36 @@ Deterministic assertions for evaluation cases
 
 ## Setup & Run
 
-### 1. Clone the repository
+1. Clone the repository
 
 ```bash
 git clone https://github.com/pillailakshmi099-ops/ai-agent-intern-test
 cd ai-agent-intern-test
-
+```
 2. Configure the API key
 
 Create a .env file in the project root:
-
+```text
 GEMINI_API_KEY=your_api_key_here
-
+```
 3. Run the agent
+```text
 python app/agent.py
-
+```
 4. Run regression tests
+```text
 python -m pytest
+```
 
 5. Run the evaluation
+```text
 python evaluation/run_evaluation.py
-
-Retrieval-Augmented Generation
+```
+## Retrieval-Augmented Generation
 
 The RAG pipeline processes the Markdown documents under:
 
-knowledge-base/
+### knowledge-base/
 
 The documents are split into useful passages and indexed for semantic retrieval.
 
@@ -193,7 +199,7 @@ Useful metadata from the documents is retained so that retrieved content can be 
 
 Only relevant passages are provided to the model rather than sending the entire knowledge base.
 
-Policy Precedence
+### Policy Precedence
 
 The agent follows this precedence:
 
@@ -213,7 +219,7 @@ For example, an internal migration note cannot override an active customer-facin
 
 If two genuinely active authoritative sources conflict, the agent does not silently select one. It explains that the supplied sources conflict and recommends human assistance or the safest interim guidance.
 
-Source Citations
+### Source Citations
 
 Policy and product answers include source references identifying the source document and relevant heading where applicable.
 
@@ -227,16 +233,16 @@ This makes the source of an answer inspectable and helps prevent unsupported com
 rder Lookup Tool
 
 Order information is retrieved through the dedicated lookup implementation in:
-
+```text
 app/order_tool.py
-
+```
 The model does not receive the complete:
-
+```text
 data/orders.json
-
+```
 Instead, the order tool performs the lookup and provides only the relevant result.
 
-Order lookup behavior
+### Order lookup behavior
 
 The tool supports:
 
@@ -253,7 +259,7 @@ The system avoids inventing delivery information when an ETA is unavailable.
 
 For cancelled or returned orders, stale delivery fields are not treated as the current delivery state.
 
-Privacy and Data Protection
+### Privacy and Data Protection
 
 The order data contains customer-facing and internal-only fields.
 
@@ -272,7 +278,7 @@ address, internal note, and risk score.
 
 is refused rather than exposing the raw order record.
 
-Multi-Turn Conversation
+### Multi-Turn Conversation
 
 Relevant conversation context is maintained within a session.
 
@@ -307,7 +313,7 @@ The estimated delivery date is August 22, 2026.
 
 The system is designed to preserve relevant context without mixing unrelated conversations.
 
-Prompt Injection and Retrieved Content Safety
+### Prompt Injection and Retrieved Content Safety
 
 The system treats the following as untrusted data:
 
@@ -329,7 +335,7 @@ API keys
 Secrets
 Internal-only information
 
-Safe Actions and Human Handoff
+### Safe Actions and Human Handoff
 
 The agent does not claim to complete actions that the application does not actually support.
 
@@ -348,26 +354,26 @@ A policy exception requires review
 An unsupported action is requested
 The application cannot safely complete the requested operation
 
-Observability
+### Observability
 
 The application provides debug/trace information that makes agent behavior inspectable.
 
 The trace can include:
 
-Current user message
-Relevant conversation history
-Retrieved passages
-Retrieval metadata and scores
-Tool calls
-Sanitized tool results
-Final response
-Errors
-Fallbacks
-Human handoffs
+- Current user message
+- Relevant conversation history
+- Retrieved passages
+- Retrieval metadata and scores
+- Tool calls
+- Sanitized tool results
+- Final response
+- Errors
+- Fallbacks
+- Human handoffs
 
 Secrets and protected customer information are not intentionally logged.
 
-Evaluation Suite
+## Evaluation Suite
 
 The repository contains:
 
@@ -376,21 +382,22 @@ The repository contains:
 
 The original cases were added to test additional behavior beyond the supplied examples.
 
-Original cases
-
+### Original cases
+```markdown
 The five additional cases cover:
 
-Lowercase order IDs
-Malformed order IDs
-Order context across follow-up turns
-Unsupported cancellation requests
-Prompt-injection attempts
-Running the evaluation
+-Lowercase order IDs
+-Malformed order IDs
+-Order context across follow-up turns
+-Unsupported cancellation requests
+-Prompt-injection attempts
+```
+### Running the evaluation
 
 Run:
-
+```text
 python evaluation/run_evaluation.py
-
+```
 The evaluation reports individual case results and an overall score.
 
 ## Final Evaluation Result
@@ -412,10 +419,11 @@ RESULT: 14/20 passed
 
 Breakdown
 Evaluation Set	         Cases	      Passed
-Supplied visible cases	 15	      11/15
-Original cases	          5	         3/5
-Combined	                20	      14/20   (70%)
+Supplied visible cases	 15	          11/15
+Original cases	         5	          3/5
+Combined	             20	          14/20   (70%)
 
+```
 The evaluation uses a generative model, so some natural-language responses and tool-selection behavior can vary between runs. Subsequent runs may therefore produce different scores.
 
 The individual evaluation cases are reported separately so that failures can be inspected and reviewed.
@@ -425,13 +433,13 @@ The remaining failures were reviewed manually, including cases involving strict 
 Regression Tests
 
 Run the regression suite with:
-
+```text
 python -m pytest
-
+```
 Current result:
-
+```text
 8 passed
-
+```
 The regression suite focuses on order lookup behavior and safety-related order handling.
 
 ## Bug Diary
@@ -498,7 +506,7 @@ The agent now acknowledges insufficient information instead of inventing a mater
 **Regression test:**  
 `insufficient-information`
 
-Known Limitations
+### Known Limitations
 
 This implementation focuses on the assignment requirements rather than production infrastructure.
 
@@ -515,7 +523,7 @@ Model-provider failover is not implemented.
 
 Before production, I would improve semantic evaluation, authentication, structured observability, production-grade retrieval storage, rate limiting, provider failure handling, and adversarial testing.
 
-AI Coding Tools Used
+## AI Coding Tools Used
 
 AI coding assistance was used during development for:
 
@@ -541,8 +549,8 @@ could be incorrectly treated as different from:
 even though the customer-facing meaning was equivalent.
 
 This highlighted the limitation of overly literal deterministic assertions. The evaluator was reviewed rather than blindly modifying the agent to produce specific phrases.
-
-Demo
+---
+## Demo
 
 The demonstration covers the required scenarios:
 
@@ -560,7 +568,7 @@ https://drive.google.com/file/d/1jZYs6DJMJpX8-YEdlTPI51flDy87QRu0/view?usp=shari
 Demo:
 https://drive.google.com/file/d/1YSHtJXeV9tpT4gJ47fmLZDZSbB3QX_64/view?usp=sharing
 
-Future Improvements
+## Future Improvements
 
 Before production, I would prioritize:
 
@@ -575,7 +583,7 @@ More extensive adversarial testing
 Real action APIs with confirmation workflows
 Human support integration
 
-Conclusion
+## Conclusion
 
 This project demonstrates a small AI support system designed around reliability rather than only happy-path responses.
 
