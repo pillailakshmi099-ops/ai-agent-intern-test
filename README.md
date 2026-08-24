@@ -402,13 +402,34 @@ The evaluation reports individual case results and an overall score.
 
 ## Final Evaluation Result
 
-The evaluation suite contains:
+The evaluation suite initially contained the 15 supplied visible cases. After
+the baseline run, five original cases were added to test additional behavior.
+
+### Baseline Evaluation
+
+Before adding the original evaluation cases and implementing the subsequent
+fixes, the initial baseline result was:
+
+```text
+Visible cases: 15
+Original cases: 0
+Total cases: 15
+
+RESULT: 5/15 passed
+```
+
+The baseline helped identify issues in areas such as retrieval behavior,
+order handling, conversation context, and safety.
+
+### Recorded Evaluation Run
+
+The final evaluation suite contains:
 
 - 15 supplied visible cases
 - 5 original cases created to test additional behavior
 - 20 cases in total
 
-### Recorded Evaluation Run
+The recorded final evaluation run produced:
 
 ```text
 Visible cases: 15
@@ -416,31 +437,52 @@ Original cases: 5
 Total cases: 20
 
 RESULT: 14/20 passed
-
-Breakdown
-Evaluation Set	         Cases	      Passed
-Supplied visible cases	 15	          11/15
-Original cases	         5	          3/5
-Combined	             20	          14/20   (70%)
-
 ```
-The evaluation uses a generative model, so some natural-language responses and tool-selection behavior can vary between runs. Subsequent runs may therefore produce different scores.
 
-The individual evaluation cases are reported separately so that failures can be inspected and reviewed.
+### Breakdown
 
-The remaining failures were reviewed manually, including cases involving strict tool-call detection and exact response requirements. The results are reported transparently rather than modifying the agent solely to optimize the evaluation score.
+| Evaluation Set | Cases | Passed |
+|---|---:|---:|
+| Supplied visible cases | 15 | 11/15 |
+| Original cases | 5 | 3/5 |
+| **Combined** | **20** | **14/20 (70%)** |
 
-Regression Tests
+The evaluation improved from **5/15 (33.3%)** in the initial baseline to
+**11/15 (73.3%)** on the supplied visible cases in the recorded final run.
+
+The five original cases were added after the baseline to test additional
+behaviors, including lowercase order IDs, malformed order IDs, follow-up
+context, unsupported cancellation requests, and prompt-injection attempts.
+
+The evaluation uses a generative model, so some natural-language responses
+and tool-selection behavior can vary between runs. Subsequent runs may
+therefore produce different scores.
+
+The individual evaluation cases are reported separately so that failures can
+be inspected and reviewed.
+
+The remaining failures were reviewed manually, including cases involving
+strict tool-call detection and exact response requirements. The results are
+reported transparently rather than modifying the agent solely to optimize the
+evaluation score.
+
+### Regression Tests
 
 Run the regression suite with:
-```text
+
+```bash
 python -m pytest
 ```
+
 Current result:
+
 ```text
 8 passed
 ```
-The regression suite focuses on order lookup behavior and safety-related order handling.
+
+The regression suite focuses on order lookup behavior and safety-related
+order handling.
+
 
 ## Bug Diary
 
